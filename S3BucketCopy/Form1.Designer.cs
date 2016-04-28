@@ -362,7 +362,7 @@ namespace S3BucketCopy
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "S3 Upload Test";
+            this.Text = "S3 Bucket Copy";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
