@@ -186,7 +186,7 @@ namespace S3BucketCopy
                         Marker = resp.NextMarker
                     });
                 }
-                Parallel.ForEach(resp.S3Objects, obj => {
+                Parallel.ForEach(resp.S3Objects, opts, obj => {
                     try
                     {
                         s3.CopyObject(new CopyObjectRequest()
