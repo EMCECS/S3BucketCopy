@@ -4352,8 +4352,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>PROGRAMFILETOLAUNCHATEND</td><td>[INSTALLDIR]S3BucketCopy.Primary output</td><td/></row>
 		<row><td>ProductCode</td><td>{D7028106-2B31-4F03-A562-08953BD1FE95}</td><td/></row>
-		<row><td>ProductName</td><td>S3BucketCopy</td><td/></row>
-		<row><td>ProductVersion</td><td>1.00.0000</td><td/></row>
+		<row><td>ProductName</td><td>S3 Bucket Copy</td><td/></row>
+		<row><td>ProductVersion</td><td>1.01.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
