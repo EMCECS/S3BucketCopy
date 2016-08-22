@@ -46,6 +46,7 @@ namespace S3BucketCopy
         public bool NoCleanup { get; set; }
         public string SourceBucket { get; set; }
         public string TargetBucket { get; set; }
+        public string StartMarker { get; set; }
 
         public int FailureCount { get { return failureCount; } }
         private int failureCount;

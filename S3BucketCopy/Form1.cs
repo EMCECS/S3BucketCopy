@@ -71,6 +71,14 @@ namespace S3BucketCopy
             {
                 harness.MaxConnections = int.Parse(maxConnectionText.Text.Trim());
             }
+            if (startMarkerCheck.Checked)
+            {
+                harness.StartMarker = markerText.Text.Trim();
+            }
+            if (useIfNoneMatch.Checked)
+            {
+                harness.UseIfNoneMatch = true;
+            }
 
             startButton.Enabled = false;
 

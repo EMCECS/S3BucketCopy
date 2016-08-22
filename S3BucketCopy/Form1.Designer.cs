@@ -77,6 +77,9 @@ namespace S3BucketCopy
             this.currentThreads = new System.Windows.Forms.Label();
             this.threadUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.useVhostCheck = new System.Windows.Forms.CheckBox();
+            this.startMarkerCheck = new System.Windows.Forms.CheckBox();
+            this.useIfNoneMatch = new System.Windows.Forms.CheckBox();
+            this.markerText = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -129,7 +132,7 @@ namespace S3BucketCopy
             // bufferSizeCheck
             // 
             this.bufferSizeCheck.AutoSize = true;
-            this.bufferSizeCheck.Location = new System.Drawing.Point(13, 196);
+            this.bufferSizeCheck.Location = new System.Drawing.Point(13, 247);
             this.bufferSizeCheck.Name = "bufferSizeCheck";
             this.bufferSizeCheck.Size = new System.Drawing.Size(77, 17);
             this.bufferSizeCheck.TabIndex = 5;
@@ -140,7 +143,7 @@ namespace S3BucketCopy
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 171);
+            this.label6.Location = new System.Drawing.Point(29, 222);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(92, 13);
             this.label6.TabIndex = 6;
@@ -183,7 +186,7 @@ namespace S3BucketCopy
             // 
             // threadCountText
             // 
-            this.threadCountText.Location = new System.Drawing.Point(127, 168);
+            this.threadCountText.Location = new System.Drawing.Point(127, 219);
             this.threadCountText.Name = "threadCountText";
             this.threadCountText.Size = new System.Drawing.Size(196, 20);
             this.threadCountText.TabIndex = 13;
@@ -191,7 +194,7 @@ namespace S3BucketCopy
             // 
             // bufferSizeText
             // 
-            this.bufferSizeText.Location = new System.Drawing.Point(127, 194);
+            this.bufferSizeText.Location = new System.Drawing.Point(127, 245);
             this.bufferSizeText.Name = "bufferSizeText";
             this.bufferSizeText.Size = new System.Drawing.Size(100, 20);
             this.bufferSizeText.TabIndex = 14;
@@ -203,9 +206,9 @@ namespace S3BucketCopy
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.outputText);
-            this.groupBox1.Location = new System.Drawing.Point(13, 272);
+            this.groupBox1.Location = new System.Drawing.Point(13, 337);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(448, 308);
+            this.groupBox1.Size = new System.Drawing.Size(448, 303);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Output";
@@ -220,12 +223,12 @@ namespace S3BucketCopy
             this.outputText.Name = "outputText";
             this.outputText.ReadOnly = true;
             this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.outputText.Size = new System.Drawing.Size(439, 282);
+            this.outputText.Size = new System.Drawing.Size(439, 277);
             this.outputText.TabIndex = 0;
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(12, 243);
+            this.startButton.Location = new System.Drawing.Point(12, 293);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 16;
@@ -236,7 +239,7 @@ namespace S3BucketCopy
             // minThreadCheck
             // 
             this.minThreadCheck.AutoSize = true;
-            this.minThreadCheck.Location = new System.Drawing.Point(13, 171);
+            this.minThreadCheck.Location = new System.Drawing.Point(13, 222);
             this.minThreadCheck.Name = "minThreadCheck";
             this.minThreadCheck.Size = new System.Drawing.Size(15, 14);
             this.minThreadCheck.TabIndex = 17;
@@ -245,7 +248,7 @@ namespace S3BucketCopy
             // maxConnectionCheck
             // 
             this.maxConnectionCheck.AutoSize = true;
-            this.maxConnectionCheck.Location = new System.Drawing.Point(13, 223);
+            this.maxConnectionCheck.Location = new System.Drawing.Point(13, 274);
             this.maxConnectionCheck.Name = "maxConnectionCheck";
             this.maxConnectionCheck.Size = new System.Drawing.Size(15, 14);
             this.maxConnectionCheck.TabIndex = 20;
@@ -253,7 +256,7 @@ namespace S3BucketCopy
             // 
             // maxConnectionText
             // 
-            this.maxConnectionText.Location = new System.Drawing.Point(127, 220);
+            this.maxConnectionText.Location = new System.Drawing.Point(127, 271);
             this.maxConnectionText.Name = "maxConnectionText";
             this.maxConnectionText.Size = new System.Drawing.Size(196, 20);
             this.maxConnectionText.TabIndex = 19;
@@ -262,7 +265,7 @@ namespace S3BucketCopy
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(29, 223);
+            this.label7.Location = new System.Drawing.Point(29, 274);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(89, 13);
             this.label7.TabIndex = 18;
@@ -271,7 +274,7 @@ namespace S3BucketCopy
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(330, 223);
+            this.label8.Location = new System.Drawing.Point(330, 274);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 13);
             this.label8.TabIndex = 21;
@@ -280,7 +283,7 @@ namespace S3BucketCopy
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(330, 196);
+            this.label9.Location = new System.Drawing.Point(330, 247);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(69, 13);
             this.label9.TabIndex = 22;
@@ -289,7 +292,7 @@ namespace S3BucketCopy
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(330, 171);
+            this.label10.Location = new System.Drawing.Point(330, 222);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(72, 13);
             this.label10.TabIndex = 23;
@@ -331,11 +334,41 @@ namespace S3BucketCopy
             this.useVhostCheck.Text = "use vhost buckets";
             this.useVhostCheck.UseVisualStyleBackColor = true;
             // 
+            // startMarkerCheck
+            // 
+            this.startMarkerCheck.AutoSize = true;
+            this.startMarkerCheck.Location = new System.Drawing.Point(14, 162);
+            this.startMarkerCheck.Name = "startMarkerCheck";
+            this.startMarkerCheck.Size = new System.Drawing.Size(107, 17);
+            this.startMarkerCheck.TabIndex = 26;
+            this.startMarkerCheck.Text = "Start from Marker";
+            this.startMarkerCheck.UseVisualStyleBackColor = true;
+            // 
+            // useIfNoneMatch
+            // 
+            this.useIfNoneMatch.AutoSize = true;
+            this.useIfNoneMatch.Location = new System.Drawing.Point(13, 192);
+            this.useIfNoneMatch.Name = "useIfNoneMatch";
+            this.useIfNoneMatch.Size = new System.Drawing.Size(306, 17);
+            this.useIfNoneMatch.TabIndex = 27;
+            this.useIfNoneMatch.Text = "Use If-None-Match to check if objects already exist (slower)";
+            this.useIfNoneMatch.UseVisualStyleBackColor = true;
+            // 
+            // markerText
+            // 
+            this.markerText.Location = new System.Drawing.Point(125, 160);
+            this.markerText.Name = "markerText";
+            this.markerText.Size = new System.Drawing.Size(196, 20);
+            this.markerText.TabIndex = 28;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 592);
+            this.ClientSize = new System.Drawing.Size(473, 652);
+            this.Controls.Add(this.markerText);
+            this.Controls.Add(this.useIfNoneMatch);
+            this.Controls.Add(this.startMarkerCheck);
             this.Controls.Add(this.useVhostCheck);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label10);
@@ -402,6 +435,9 @@ namespace S3BucketCopy
         private System.Windows.Forms.Label currentThreads;
         private System.Windows.Forms.Timer threadUpdateTimer;
         private System.Windows.Forms.CheckBox useVhostCheck;
+        private System.Windows.Forms.CheckBox startMarkerCheck;
+        private System.Windows.Forms.CheckBox useIfNoneMatch;
+        private System.Windows.Forms.TextBox markerText;
     }
 }
 
