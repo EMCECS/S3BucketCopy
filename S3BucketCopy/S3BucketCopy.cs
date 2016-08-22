@@ -47,6 +47,7 @@ namespace S3BucketCopy
         public string SourceBucket { get; set; }
         public string TargetBucket { get; set; }
         public string StartMarker { get; set; }
+        public bool UseIfNoneMatch { set; get; }
 
         public int FailureCount { get { return failureCount; } }
         private int failureCount;
@@ -209,6 +210,20 @@ namespace S3BucketCopy
                 });
                 Parent.LogOutput(string.Format(" -- {0} objects copied", successCount));
             } while (resp.IsTruncated);
+        }
+
+        private async Task<ListObjectsResponse> fetchObjectListing(string bucketName, string marker)
+        {
+            ListObjectsRequest req = new ListObjectsRequest()
+            {
+                BucketName = bucketName
+            };
+            if (marker != null)
+            {
+                req.Marker = marker;
+            }
+
+            return await s3.ListObjectsAsync(req);
         }
 
         private void printSummary()
