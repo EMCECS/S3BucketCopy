@@ -53,8 +53,13 @@ namespace S3BucketCopy
         private int failureCount;
         public int SuccessCount { get { return successCount; } }
         private int successCount;
+        public int SkippedCount { get { return skippedCount; } }
+        private int skippedCount;
+
 
         public TimeSpan Duration { get; private set; }
+
+        private delegate ListObjectsResponse ListObjectsDelegate(string bucketName, string marker);
 
         AmazonS3Client s3;
 
@@ -63,6 +68,7 @@ namespace S3BucketCopy
             BufferSize = -1;
             successCount = 0;
             failureCount = 0;
+            skippedCount = 0;
             MinThreads = -1;
             MaxConnections = -1;
             UseVhostBuckets = false;
@@ -154,6 +160,7 @@ namespace S3BucketCopy
         {
             int workerThreads = 0;
             int ioThreads = 0;
+            string marker = StartMarker;
 
             ThreadPool.GetMinThreads(out workerThreads, out ioThreads);
             Parent.LogOutput(string.Format(" - Min threads: worker: {0} IO: {1}", workerThreads, ioThreads));
@@ -173,33 +180,76 @@ namespace S3BucketCopy
             opts.MaxDegreeOfParallelism = s3.Config.ConnectionLimit;
 
             ListObjectsResponse resp = null;
+            bool moreResults = true;
             do
             {
                 if (resp == null)
                 {
-                    resp = s3.ListObjects(SourceBucket);
+                    resp = fetchObjectListingSync(SourceBucket, marker);
                 }
-                else
+                marker = resp.NextMarker;
+
+                // If there's more, start fetching the next page of results.
+                Task<ListObjectsResponse> t = null;
+                if(resp.IsTruncated)
                 {
-                    // Continue listing from marker
-                    resp = s3.ListObjects(new ListObjectsRequest()
-                    {
-                        BucketName = SourceBucket,
-                        Marker = resp.NextMarker
-                    });
+                    t = fetchObjectListing(SourceBucket, marker);
+                } else
+                {
+                    moreResults = false;
                 }
+
                 Parallel.ForEach(resp.S3Objects, opts, obj => {
                     try
                     {
-                        s3.CopyObject(new CopyObjectRequest()
+                        if(UseIfNoneMatch)
+                        {
+                            // Actually, can't use If-None-Match on the *target* object yet.  Need to
+                            // HEAD the target.
+                            try
+                            {
+                                GetObjectMetadataResponse meta = s3.GetObjectMetadata(TargetBucket, obj.Key);
+                                if(meta.ETag.Equals(obj.ETag))
+                                {
+                                    // Target is same.
+                                    Interlocked.Increment(ref skippedCount);
+                                    return;
+                                }
+                            } catch(AmazonS3Exception e)
+                            {
+                                if(e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                                {
+                                    // Good!
+                                } else
+                                {
+                                    throw e;
+                                }
+                            }
+                        }
+                        CopyObjectRequest req = new CopyObjectRequest()
                         {
                             SourceBucket = SourceBucket,
                             SourceKey = obj.Key,
                             DestinationBucket = TargetBucket,
                             DestinationKey = obj.Key
-                        });
+                        };                      
+                        s3.CopyObject(req);
                         
                         Interlocked.Increment(ref successCount);
+                    } 
+                    catch (AmazonS3Exception e)
+                    {
+                        if (e.StatusCode == System.Net.HttpStatusCode.PreconditionFailed)
+                        {
+                            // ETag matched
+                            Interlocked.Increment(ref skippedCount);
+                        }
+                        else
+                        {
+                            // Some other error.
+                            Interlocked.Increment(ref failureCount);
+                            Parent.LogOutput(string.Format("Error copying {0}: {1}", obj.Key, e.ToString()));
+                        }
                     }
                     catch (Exception e)
                     {
@@ -208,8 +258,21 @@ namespace S3BucketCopy
                     }
 
                 });
-                Parent.LogOutput(string.Format(" -- {0} objects copied", successCount));
-            } while (resp.IsTruncated);
+                if(UseIfNoneMatch)
+                {
+                    Parent.LogOutput(string.Format(" -- {0} objects copied ({2} skipped). NextMarker = {1}", successCount, marker, skippedCount));
+                }
+                else
+                {
+                    Parent.LogOutput(string.Format(" -- {0} objects copied. NextMarker = {1}", successCount, marker));
+                }
+                if (t != null)
+                {
+                    t.Wait();
+                    resp = t.Result;
+                }
+
+            } while (moreResults);
         }
 
         private async Task<ListObjectsResponse> fetchObjectListing(string bucketName, string marker)
@@ -224,6 +287,20 @@ namespace S3BucketCopy
             }
 
             return await s3.ListObjectsAsync(req);
+        }
+
+        private ListObjectsResponse fetchObjectListingSync(string bucketName, string marker)
+        {
+            ListObjectsRequest req = new ListObjectsRequest()
+            {
+                BucketName = bucketName
+            };
+            if (marker != null)
+            {
+                req.Marker = marker;
+            }
+
+            return s3.ListObjects(req);
         }
 
         private void printSummary()

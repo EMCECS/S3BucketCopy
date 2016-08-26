@@ -132,12 +132,13 @@ namespace S3BucketCopy
             // bufferSizeCheck
             // 
             this.bufferSizeCheck.AutoSize = true;
-            this.bufferSizeCheck.Location = new System.Drawing.Point(13, 247);
+            this.bufferSizeCheck.Location = new System.Drawing.Point(13, 632);
             this.bufferSizeCheck.Name = "bufferSizeCheck";
             this.bufferSizeCheck.Size = new System.Drawing.Size(77, 17);
             this.bufferSizeCheck.TabIndex = 5;
             this.bufferSizeCheck.Text = "Buffer Size";
             this.bufferSizeCheck.UseVisualStyleBackColor = true;
+            this.bufferSizeCheck.Visible = false;
             this.bufferSizeCheck.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label6
@@ -194,11 +195,12 @@ namespace S3BucketCopy
             // 
             // bufferSizeText
             // 
-            this.bufferSizeText.Location = new System.Drawing.Point(127, 245);
+            this.bufferSizeText.Location = new System.Drawing.Point(127, 630);
             this.bufferSizeText.Name = "bufferSizeText";
             this.bufferSizeText.Size = new System.Drawing.Size(100, 20);
             this.bufferSizeText.TabIndex = 14;
             this.bufferSizeText.Text = "131072";
+            this.bufferSizeText.Visible = false;
             // 
             // groupBox1
             // 
@@ -239,6 +241,8 @@ namespace S3BucketCopy
             // minThreadCheck
             // 
             this.minThreadCheck.AutoSize = true;
+            this.minThreadCheck.Checked = true;
+            this.minThreadCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.minThreadCheck.Location = new System.Drawing.Point(13, 222);
             this.minThreadCheck.Name = "minThreadCheck";
             this.minThreadCheck.Size = new System.Drawing.Size(15, 14);
@@ -248,7 +252,7 @@ namespace S3BucketCopy
             // maxConnectionCheck
             // 
             this.maxConnectionCheck.AutoSize = true;
-            this.maxConnectionCheck.Location = new System.Drawing.Point(13, 274);
+            this.maxConnectionCheck.Location = new System.Drawing.Point(13, 248);
             this.maxConnectionCheck.Name = "maxConnectionCheck";
             this.maxConnectionCheck.Size = new System.Drawing.Size(15, 14);
             this.maxConnectionCheck.TabIndex = 20;
@@ -256,7 +260,7 @@ namespace S3BucketCopy
             // 
             // maxConnectionText
             // 
-            this.maxConnectionText.Location = new System.Drawing.Point(127, 271);
+            this.maxConnectionText.Location = new System.Drawing.Point(127, 245);
             this.maxConnectionText.Name = "maxConnectionText";
             this.maxConnectionText.Size = new System.Drawing.Size(196, 20);
             this.maxConnectionText.TabIndex = 19;
@@ -265,7 +269,7 @@ namespace S3BucketCopy
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(29, 274);
+            this.label7.Location = new System.Drawing.Point(29, 248);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(89, 13);
             this.label7.TabIndex = 18;
@@ -274,7 +278,7 @@ namespace S3BucketCopy
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(330, 274);
+            this.label8.Location = new System.Drawing.Point(330, 248);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 13);
             this.label8.TabIndex = 21;
@@ -283,11 +287,12 @@ namespace S3BucketCopy
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(330, 247);
+            this.label9.Location = new System.Drawing.Point(330, 632);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(69, 13);
             this.label9.TabIndex = 22;
             this.label9.Text = "default: 8192";
+            this.label9.Visible = false;
             // 
             // label10
             // 
