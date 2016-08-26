@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -34,6 +35,9 @@ namespace S3BucketCopy
 {
     public partial class Form1 : Form
     {
+
+        private StreamWriter logFileWriter;
+
         public Form1()
         {
             InitializeComponent();
@@ -48,6 +52,13 @@ namespace S3BucketCopy
         private void startButton_Click(object sender, EventArgs e)
         {
             clearOutput();
+
+            // Open log file
+            string logFileName = string.Format("bucketcopy-{0}.log", DateTime.Now.ToFileTimeUtc());
+            string logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), logFileName);
+            LogOutput(string.Format("Logging output to {0}", logFilePath));
+            logFileWriter = new StreamWriter(File.OpenWrite(logFilePath));
+
             LogOutput("Starting run...");
             S3BucketCopy harness = new S3BucketCopy()
             {
@@ -71,6 +82,14 @@ namespace S3BucketCopy
             {
                 harness.MaxConnections = int.Parse(maxConnectionText.Text.Trim());
             }
+            if (startMarkerCheck.Checked)
+            {
+                harness.StartMarker = markerText.Text.Trim();
+            }
+            if (useIfNoneMatch.Checked)
+            {
+                harness.UseIfNoneMatch = true;
+            }
 
             startButton.Enabled = false;
 
@@ -80,12 +99,19 @@ namespace S3BucketCopy
 
         private void runComplete(IAsyncResult result)
         {
+            if (logFileWriter != null)
+            {
+                logFileWriter.Close();
+                logFileWriter = null;
+            }
+
             // Re-enable start button
             startButton.Invoke(new VoidDelegate(enableStartButton));
 
             // End async method
             VoidDelegate d = (VoidDelegate)((AsyncResult)result).AsyncDelegate;
             d.EndInvoke(result);
+
         }
 
         private void enableStartButton()
@@ -105,6 +131,11 @@ namespace S3BucketCopy
             {
                 string s = string.Format("{0:u} - {1}\r\n", DateTime.UtcNow, v);
                 outputText.AppendText(s);
+                if(logFileWriter != null)
+                {
+                    logFileWriter.Write(s);
+                    logFileWriter.Flush();
+                }
             }
         }
 
